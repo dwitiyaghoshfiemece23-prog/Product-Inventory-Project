@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Inventory & Analytics</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #26334d;
+        }
+
+        header {
+            background: #243b64;
+            color: white;
+            padding: 25px 8%;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dce5f7;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #152b4910;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #4569b0;
+        }
+
+        .stat p {
+            color: #68758b;
+            margin: 0 0 10px;
+        }
+
+        .stat h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            border: 1px solid #cbd3e1;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #345a9e;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #243b64;
+        }
+
+        .secondary {
+            background: #64748b;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #e6eaf1;
+        }
+
+        th {
+            background: #f1f4fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #e5edff;
+            color: #284e91;
+            font-size: 12px;
+        }
+
+        #message {
+            margin-top: 12px;
+            color: #345a9e;
+        }
+
+        #report {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            background: #f1f4fa;
+            padding: 16px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #68758b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Product Inventory Dashboard</h1>
+        <p>Interactive Product Inventory & Analytics System</p>
+    </header>
+
+    <main>
+
+        <section class="stats">
+            <div class="stat">
+                <p>Total Products</p>
+                <h2 id="productCount">0</h2>
+            </div>
+
+            <div class="stat">
+                <p>Total Inventory Value</p>
+                <h2 id="inventoryValue">₹0</h2>
+            </div>
+
+            <div class="stat">
+                <p>Affordable Products</p>
+                <h2 id="affordableCount">0</h2>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Add a Product</h2>
+            <p>Enter a product name and its price.</p>
+
+            <form id="productForm">
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Product name"
+                    required
+                >
+
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Price in ₹"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+
+                <button type="submit">Add Product</button>
+            </form>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Inventory Roster</h2>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="productTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Financial Analytics</h2>
+
+            <p>
+                <strong>Affordable products (under ₹200):</strong>
+            </p>
+            <div id="affordableProducts">None</div>
+
+            <h3>Formatted Inventory Report</h3>
+            <div id="report"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Tax and Discount Calculator</h2>
+
+            <form id="calculatorForm">
+                <input
+                    type="number"
+                    id="taxRate"
+                    placeholder="Tax % (e.g. 5)"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value="5"
+                    required
+                >
+
+                <input
+                    type="number"
+                    id="discountRate"
+                    placeholder="Discount % (e.g. 10)"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value="10"
+                    required
+                >
+
+                <button type="submit">Calculate</button>
+            </form>
+
+            <p id="calculationResult"></p>
+        </section>
+
+    </main>
+    <script src="script.js"></script>
+
+</body>
+</html>
